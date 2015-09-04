@@ -121,6 +121,8 @@ class CSMLoadModel(TaskSet):
         super(CSMLoadModel, self).__init__(*args, **kwargs)
         self.course_key = CourseLocator('org', 'course', 'run')
         self.usages_with_data = set()
+        for _ in xrange(1001):
+            self.set_many()
 
     def _gen_field_count(self):
         choice = numpy.random.random_sample()
@@ -160,7 +162,7 @@ class CSMLoadModel(TaskSet):
             }
 
     def _gen_num_blocks(self):
-        return int(numpy.random.pareto(a=2.21) + 1)
+        return min(int(numpy.random.pareto(a=2.21) + 1), 1000)
 
     def _gen_usage_key(self):
         return BlockUsageLocator(
@@ -175,18 +177,16 @@ class CSMLoadModel(TaskSet):
     @transaction.commit_manually
     def get_many(self):
         block_count = self._gen_num_blocks()
-        if block_count > len(self.usages_with_data):
-            self.set_many()
-        else:
-            # TODO: This doesn't accurately represent queries which would retrieve
-            # data from StudentModules with no state, or usages with no StudentModules
-            self.client.get_many(
-                self.client.username,
-                random.sample(self.usages_with_data, block_count)
-            )
+
+        # TODO: This doesn't accurately represent queries which would retrieve
+        # data from StudentModules with no state, or usages with no StudentModules
+        self.client.get_many(
+            self.client.username,
+            random.sample(self.usages_with_data, block_count)
+        )
+
         transaction.commit()
 
-    @task(1)
     @transaction.commit_manually
     def set_many(self):
         usage_key = self._gen_usage_key()
