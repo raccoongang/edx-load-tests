@@ -259,6 +259,17 @@ var contentsIndexes = [
         "name" : "author_id_1_course_id_1",
         "ns" : "comments-prod.contents",
         "background" : true
+    },
+    {
+        "v" : 1,
+        "key" : {
+            "comment_thread_id" : 1,
+            "author_id" : 1,
+            "created_at" : 1
+        },
+        "ns" : "comments-prod.contents",
+        "name" : "comment_thread_id_1_author_id_1_created_at_1",
+        "background" : true
     }
 ];
 
