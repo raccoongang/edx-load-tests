@@ -212,6 +212,10 @@ demo_course = CourseData(
         "5c90cffecd9b48b188cbfea176bf7fe9",
         "636541acbae448d98ab484b028c9a7f6",
         "7e9b434e6de3435ab99bd3fb25bde807",
+        "ab98b0e385e64445ae97e730ffdf17e7",
+    ),
+    special_exam_ids=(
+        "34",
     ),
     video_ids=(
         "CCxmtcICYNc",
@@ -233,6 +237,7 @@ demo_course = CourseData(
         '/social_integration/6ab9c442501d472c8ed200e367b4edfa/',
         '/1414ffd5143b4b508f739b563ab468b7/workflow/',
         '/interactive_demonstrations/basic_questions/4',
+        '/interactive_demonstrations/19a30717eff543078a5d94ae9d6c18a5/',
     ),
     html_usage_ids=(  # Note that this is not currently an exhaustive list.
         'i4x://edX/DemoX/html/030e35c4756a4ddc8d40b95fbbfff4d4',
