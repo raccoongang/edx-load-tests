@@ -51,7 +51,7 @@ class CourseImport(TaskSet):
                 settings.data['BASIC_AUTH_PASS'],
             )
         self.client.get("/logout")
-        self.client.get("/signin")
+        self.client.get("/login")
         response = self.client.post("/login_post",
                                     data={'email': settings.data['CMS_USER_EMAIL'],
                                           'password': settings.secrets['CMS_USER_PASSWORD'],
