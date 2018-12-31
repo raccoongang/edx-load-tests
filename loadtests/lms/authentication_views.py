@@ -10,10 +10,14 @@ class AuthenticationViewsTasks(LmsTasks):
         """
         Test the primary login/logout endpoints.
         """
+
+        """
         if self.locust._is_logged_in:
             self.logout()
         else:
-            self.login()
+            self.login_via_sso()
+        """
+        self.login_via_sso()
 
     @task(1)
     def stop(self):

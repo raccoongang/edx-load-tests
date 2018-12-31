@@ -1,7 +1,7 @@
 import requests
 import re
 import csv
-from os import getcwd
+import random
 
 
 def LoginViaSSO(username, password):
@@ -23,16 +23,17 @@ def LoginViaSSO(username, password):
 
 
     #data = 'name=test&pass=test&form_build_id={}&form_id=user_login&op=Sign+In'.format(token)
-    portal_post = session.post('https://youngthinker.org/en/user/login?destination=oauth2/authorize', data=data)
+    portal_post = session.post('https://youngthinker.org/en/user/login?destination=oauth2/authorize', data=data, allow_redirects = True)
 
     #get oauth2 authorized to get the code
-    get_edx = session.get('https://en-courses.youngthinker.org/auth/login/drupal-oauth2/?auth_entry=login&next=%2Fcourses')
+    get_edx = session.get('https://en-courses.youngthinker.org/auth/login/drupal-oauth2/?auth_entry=login&next=%2Fcourses', allow_redirects = True)
 
 
-    ytp_edx = session.get('https://en-courses.youngthinker.org/courses')
+    ytp_edx = session.get('https://en-courses.youngthinker.org/courses', allow_redirects = True)
+
     print (session.cookies)
 
-
+    return session.cookies
 
 def extract_creds(file):
 
@@ -44,17 +45,24 @@ def extract_creds(file):
             list_creds.append(creds_edit)
         return list_creds
 
-
-
-
-def check_login():
+def login():
     list_of_credentials = extract_creds('users_txt.txt')
     for i in range(0, len(list_of_credentials)):
+
         username = list_of_credentials[i][0]
         password = list_of_credentials[i][1]
         SSO_Login = LoginViaSSO(username, password)
 
+def random_login():
+    list_of_credentials = extract_creds('loadtests/test/users_txt.txt')
+    i = random.randint(0, 199)
+    username = list_of_credentials[i][0]
+    password = list_of_credentials[i][1]
+    SSO_Login = LoginViaSSO(username, password)
 
 
 
-a = check_login()
+
+dict1 = {'Name': 'Zabra', 'Age': 7, 'Name': 'No'}
+
+print (dict1.get('Name', 'yo'))

@@ -89,9 +89,8 @@ demo_course = CourseData(
         "19a30717eff543078a5d94ae9d6c18a5",
         "simulations",
         "graded_simulations",
-        "07bc32474380492cb34f76e5f9d9a135",
-        "7c4d5f5a96ac4543890beb4259a2d3e0",
-        "9824e3ad64cd4f2a94526c79f6492881",
+
+
     ),
     capa_problems={
         'd1b84dcd39b0423d9e288f27f0f7f242': {
@@ -106,9 +105,8 @@ demo_course = CourseData(
         },
         '75f9562c77bc4858b61f907bb810d974': {
             'inputs': {
-                '_2_1': ['3.1415'],
-                '_3_1': ['4518'],
-                '_4_1': ['5'],
+                '_2_1': ['choice_0'],
+
             },
             'showanswer': 'always',
         },
@@ -215,14 +213,14 @@ demo_course = CourseData(
         "5c90cffecd9b48b188cbfea176bf7fe9",
         "636541acbae448d98ab484b028c9a7f6",
         "7e9b434e6de3435ab99bd3fb25bde807",
-        "dc37305d4dc042ebb6fdfd13911a8ae5",
+
     ),
     video_ids=(
-        "CCxmtcICYNc",
+
         "o2pLltkrhGM",
         "qWxm7CA2v24",
         "b7xgknqkQk8",
-        "LkVZhEtaQCA",
+
     ),
     courseware_paths=(
         '',
@@ -237,8 +235,8 @@ demo_course = CourseData(
         '/social_integration/6ab9c442501d472c8ed200e367b4edfa/',
         '/1414ffd5143b4b508f739b563ab468b7/workflow/',
         '/interactive_demonstrations/basic_questions/4',
-        '/71c88099fdb641e6aa511283a72f1a91/9824e3ad64cd4f2a94526c79f6492881/',
-        '/71c88099fdb641e6aa511283a72f1a91/7c4d5f5a96ac4543890beb4259a2d3e0/',
+
+
     ),
     html_usage_ids=(  # Note that this is not currently an exhaustive list.
         'i4x://edX/DemoX/html/030e35c4756a4ddc8d40b95fbbfff4d4',

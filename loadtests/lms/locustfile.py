@@ -3,6 +3,9 @@ Load test for the edx-platform LMS.
 """
 import os
 import sys
+import re
+import random
+import csv
 
 # due to locust sys.path manipulation, we need to re-add the project root.
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
@@ -136,13 +139,73 @@ class LmsTest(LmsTasks):
     """
 
     tasks = {
-        AuthenticationViewsTasks: 1,
+        #AuthenticationViewsTasks: 1,
         CoursewareViewsTasks: 5,
-        ForumsTasks: 1,
+
+
         ModuleRenderTasks: int(round(22 * float(settings.data.get('MODULE_RENDER_MODIFIER', 1)))),
-        ProctoredExamTasks: int(round(1 * float(settings.data.get('PROCTORED_EXAM_MODIFIER', 1)))),
+
         TrackingTasks: 24,
     }
+
+
+    def login(self):
+
+
+        def LoginViaSSO(username, password):
+            # go to ytp portal
+            portal = self.client.get(
+                'https://en-courses.youngthinker.org/auth/login/drupal-oauth2/?auth_entry=login&next=%2Fcourses',
+                allow_redirects=True)
+
+            # get token from from_text
+            pattern = '<input type="hidden" name="form_build_id" value=[^>]+>'
+            result = re.search(pattern, portal.text)
+            result_str = str((result.group(0)))
+            token = ''.join(result_str.split('"')[-2:-1])
+
+            # put token and perform post creds
+            data = {'name': username, 'pass': password, 'form_build_id': token, 'form_id': 'user_login', 'op': 'Sign+In'}
+
+
+            portal_post = self.client.post('https://youngthinker.org/en/user/login?destination=oauth2/authorize', data=data,
+                                       allow_redirects=True)
+
+            # get oauth2 authorized to get the code
+            get_edx = self.client.get(
+                'https://en-courses.youngthinker.org/auth/login/drupal-oauth2/?auth_entry=login&next=%2Fcourses',
+                allow_redirects=True)
+
+            ytp_edx = self.client.get('https://en-courses.youngthinker.org/courses', allow_redirects=True)
+
+
+            return self.client.cookies
+
+
+        def extract_creds(file):
+            with open(file, 'r+') as users_csv:
+                users_reader = csv.reader(users_csv)
+                list_creds = []
+                for row in users_reader:
+                    creds_edit = row[0].split(';')
+                    list_creds.append(creds_edit)
+                return list_creds
+
+        def random_login():
+            list_of_credentials = extract_creds('loadtests/test/users_txt.txt')
+            i = random.randint(0, 199)
+            username = list_of_credentials[i][0]
+            password = list_of_credentials[i][1]
+            SSO_Login = LoginViaSSO(username, password)
+
+        login =  random_login()
+        return login
+
+    def on_start(self):
+        #login
+        self.login()
+
+
 
 
 class LmsLocust(HttpLocust):
@@ -161,3 +224,7 @@ class LmsLocust(HttpLocust):
     @property
     def _is_registered(self):
         return bool(self._user_id and self._email and self._password)
+
+
+
+

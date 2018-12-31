@@ -8,6 +8,7 @@ from locust import TaskSet
 from helpers.edx_app import EdxAppTasks
 from helpers.mixins import EnrollmentTaskSetMixin
 from helpers import settings
+from test import load
 
 
 class LmsTasks(EnrollmentTaskSetMixin, EdxAppTasks):
@@ -91,6 +92,9 @@ class LmsTasks(EnrollmentTaskSetMixin, EdxAppTasks):
         return success
 
     def on_start(self):
+        pass
+        #self.login_via_sso()
+        """
         if not self.locust._is_registered:
             self.auto_auth(params={'no_login': True})
 
@@ -120,3 +124,8 @@ class LmsTasks(EnrollmentTaskSetMixin, EdxAppTasks):
             # NOTE: this is basically a retry mechanism without backoff, so it may behoove us to add delays to this
             if self._is_child and not self.locust._is_enrolled:
                 self.interrupt()
+        """
+
+    def login_via_sso(self):
+        login = load.random_login()
+        return login
