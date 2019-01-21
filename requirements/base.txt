@@ -2,8 +2,7 @@
 # should import this file.
 
 # load testing software
-locustio==0.7.5
-pyzmq==15.2.0  # needed for distributed mode. remove after we start using locustio>=8.0
+locustio==0.9.0
 
 # common loadtest requirements
 edx-opaque-keys==0.4
