@@ -3,6 +3,10 @@
 *.DS_Store
 *.log
 *venv*
+*.swp
+*.swo
+venv/
+
 # pyenv
 .python-version
 
@@ -11,3 +15,10 @@ data/
 
 # ignore all settings (which might contain secrets)
 settings_files/*.yml
+
+# pycharm
+.idea
+.cache/
+
+# ecommerce_deadlock
+*ecommerce_deadlock_constants.py
