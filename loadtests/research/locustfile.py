@@ -11,15 +11,15 @@ class SearchOnMainPage(TaskSet):
     2. Search by some Categories
     """
     def on_start(self):
-        self.fileToSearchBySomeText = self.getValueToSearchBySomeText()
-        self.fileToSearchByCategories = self.getValueToSearchByCategories()
+        self.queries_to_search_by_text = self.get_value_to_search_by_text()
+        self.queries_to_search_by_category = self.get_value_to_search_by_category()
         self.csrftoken = self.get_csrftoken()
 
-    def getValueToSearchBySomeText(self):
+    def get_value_to_search_by_text(self):
         with open(os.path.realpath('.') + "/loadtests/research/string_value.txt") as file:
             return file.read()
 
-    def getValueToSearchByCategories(self):
+    def get_value_to_search_by_category(self):
         with open(os.path.realpath('.') + "/loadtests/research/categories.txt") as file:
             return file.read()
 
@@ -47,7 +47,7 @@ class SearchOnMainPage(TaskSet):
 
     @task(1)
     def test_search_1(self):
-        data = {'search_string': self.fileToSearchBySomeText, 'page_size': '100', 'page_index': '0'}
+        data = {'search_string': self.queries_to_search_by_text, 'page_size': '100', 'page_index': '0'}
         response = self._create_post_request(
             'Search 1',
             **data
@@ -55,7 +55,7 @@ class SearchOnMainPage(TaskSet):
 
     @task(2)
     def test_search_2(self):
-        data = {'search_string': '', 'page_size': '100', 'page_index': '0', 'category': self.fileToSearchByCategories}
+        data = {'search_string': '', 'page_size': '100', 'page_index': '0', 'category': self.queries_to_search_by_category}
         response = self._create_post_request(
             'Search 2',
             **data
