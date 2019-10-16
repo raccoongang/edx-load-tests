@@ -1,62 +1,77 @@
-import random
-
-from locust import  *
 import requests
+from locust.core import TaskSet, task, HttpLocust
+import os
 
 URL = 'https://lms-lakeside-stage.raccoongang.com'
 
 
-class Search(TaskSet):
+class SearchOnMainPage(TaskSet):
+    '''
+    Load test for searching on main page:
+    1. Search by some text
+    2. Search by some Categories
+    '''
+    fileToSearchBySomeText = None
+    fileToSearchByCategories = None
+    csrftoken = None
 
-    def value_1(self):
-        file = open('string_value.txt', 'r')
-        fileList = []
-        for line in file.readlines():
-            fileList.append(line.replace('\r\n', ''))
-        return random.choice(fileList)
+    def __init__(self, parent):
+        super(SearchOnMainPage, self).__init__(parent)
+        self.fileToSearchBySomeText = self.getValueToSearchBySomeText()
+        self.fileToSearchByCategories = self.getValueToSearchByCategories()
+        self.csrftoken = self.get_csrftoken()
 
-    def value_2(self):
-        file = open('categories.txt', 'r')
-        fileList = []
-        for line in file.readlines():
-            fileList.append(line.replace('\r\n', ''))
-        return random.choice(fileList)
+
+    def getValueToSearchBySomeText(self):
+        with open(os.path.realpath('.') + "/loadtests/research/string_value.txt") as file:
+            return file.read()
+
+    def getValueToSearchByCategories(self):
+        with open(os.path.realpath('.') + "/loadtests/research/categories.txt") as file:
+            return file.read()
 
     def get_csrftoken(self):
-        csrftoken = None
         client = requests.session()
-        client.get(URL, headers= {'referer':'https://lms-lakeside-stage.raccoongang.com/'})
+        client.get(URL, headers={'referer':'https://lms-lakeside-stage.raccoongang.com/'})
         if 'csrftoken' in client.cookies:
             csrftoken = client.cookies['csrftoken']
         else:
             csrftoken = client.cookies['csrf']
         return csrftoken
 
+    def _create_post_request(self, name, **kwargs):
+        post_req = self.client.post(
+            '/search/course_discovery/',
+            kwargs,
+            headers={
+                'x-csrftoken': self.csrftoken,
+                'referer': 'https://lms-lakeside-stage.raccoongang.com/',
+                'cookie': 'csrftoken=' + self.csrftoken,
+            },
+            name=name
+        )
+        return post_req
+
+
+
     @task(1)
     def test_search_1(self):
-        csrftoken = self.get_csrftoken()
-        self.client.post('/search/course_discovery/',
-                        {'search_string': self.value_1, 'page_size': '100', 'page_index': '0'},
-                        headers ={'x-csrftoken': csrftoken,
-                                  'referer': 'https://lms-lakeside-stage.raccoongang.com/',
-                                  'cookie': 'csrftoken=' + csrftoken
-                        },
-                        name='Search 1'
+        data = {'search_string': self.fileToSearchBySomeText, 'page_size': '100', 'page_index': '0'}
+        response = self._create_post_request(
+            'Search 1',
+            **data
         )
 
     @task(1)
     def test_search_2(self):
-        csrftoken = self.get_csrftoken()
-        self.client.post('/search/course_discovery/',
-                         {'search_string': '', 'page_size': '100', 'page_index': '0', 'category': self.value_2},
-                         headers={'x-csrftoken': csrftoken,
-                                  'referer': 'https://lms-lakeside-stage.raccoongang.com/',
-                                  'cookie': 'csrftoken=' + csrftoken
-                                  },
-                         name='Search 2'
-                         )
+        data = {'search_string': '', 'page_size': '100', 'page_index': '0', 'category': self.fileToSearchByCategories}
+        response = self._create_post_request(
+            'Search 2',
+            **data
+        )
 
 class WebsiteUser(HttpLocust):
-    task_set = Search
+    task_set = SearchOnMainPage
     min_wait = 5
     max_wait = 5
+    
