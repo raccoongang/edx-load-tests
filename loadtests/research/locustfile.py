@@ -1,9 +1,6 @@
+import os
 import requests
 from locust.core import TaskSet, task, HttpLocust
-import os
-
-URL = 'https://lms-lakeside-stage.raccoongang.com'
-
 
 class SearchOnMainPage(TaskSet):
     '''
@@ -32,7 +29,7 @@ class SearchOnMainPage(TaskSet):
 
     def get_csrftoken(self):
         client = requests.session()
-        client.get(URL, headers={'referer':'https://lms-lakeside-stage.raccoongang.com/'})
+        client.get(self.locust.host, headers={'referer': self.locust.host})
         if 'csrftoken' in client.cookies:
             csrftoken = client.cookies['csrftoken']
         else:
@@ -45,7 +42,7 @@ class SearchOnMainPage(TaskSet):
             kwargs,
             headers={
                 'x-csrftoken': self.csrftoken,
-                'referer': 'https://lms-lakeside-stage.raccoongang.com/',
+                'referer': self.locust.host,
                 'cookie': 'csrftoken=' + self.csrftoken,
             },
             name=name
