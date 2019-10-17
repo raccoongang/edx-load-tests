@@ -141,7 +141,8 @@ class LmsTest(LmsTasks):
         CoursewareViewsTasks: 5,
         ForumsTasks: 1,
         ModuleRenderTasks: int(round(22 * float(settings.data.get('MODULE_RENDER_MODIFIER', 1)))),
-        ProctoredExamTasks: int(round(1 * float(settings.data.get('PROCTORED_EXAM_MODIFIER', 1)))),
+        # there are no special_exams in standard edX-Demo-Course
+        # ProctoredExamTasks: int(round(1 * float(settings.data.get('PROCTORED_EXAM_MODIFIER', 1)))),
         TrackingTasks: 24,
     }
 
@@ -155,7 +156,8 @@ class LakeSideLmsTest(LmsTest):
         CoursewareViewsTasks: 5,
         ForumsTasks: 1,
         ModuleRenderTasks: int(round(22 * float(settings.data.get('MODULE_RENDER_MODIFIER', 1)))),
-        ProctoredExamTasks: int(round(1 * float(settings.data.get('PROCTORED_EXAM_MODIFIER', 1)))),
+        # there are no special_exams in standard edX-Demo-Course
+        # ProctoredExamTasks: int(round(1 * float(settings.data.get('PROCTORED_EXAM_MODIFIER', 1)))),
         TrackingTasks: 24,
         SearchOnMainPage: 10,
     }
