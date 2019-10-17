@@ -18,6 +18,7 @@ from module_render import ModuleRenderTasks
 from wiki_views import WikiViewTask
 from tracking import TrackingTasks
 from helpers import settings, markers
+from loadtests.research.locustfile import SearchOnMainPage
 
 settings.init(__name__, required_data=[
     'courses',
@@ -142,6 +143,21 @@ class LmsTest(LmsTasks):
         ModuleRenderTasks: int(round(22 * float(settings.data.get('MODULE_RENDER_MODIFIER', 1)))),
         ProctoredExamTasks: int(round(1 * float(settings.data.get('PROCTORED_EXAM_MODIFIER', 1)))),
         TrackingTasks: 24,
+    }
+
+
+class LakeSideLmsTest(LmsTest):
+    """
+    Lakeside specific TestSuit.
+    """
+    tasks = {
+        AuthenticationViewsTasks: 1,
+        CoursewareViewsTasks: 5,
+        ForumsTasks: 1,
+        ModuleRenderTasks: int(round(22 * float(settings.data.get('MODULE_RENDER_MODIFIER', 1)))),
+        ProctoredExamTasks: int(round(1 * float(settings.data.get('PROCTORED_EXAM_MODIFIER', 1)))),
+        TrackingTasks: 24,
+        SearchOnMainPage: 10,
     }
 
 
