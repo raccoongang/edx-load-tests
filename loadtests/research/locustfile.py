@@ -1,23 +1,19 @@
 import os
+
 import requests
 from locust.core import TaskSet, task, HttpLocust
 
+
 class SearchOnMainPage(TaskSet):
-    '''
+    """
     Load test for searching on main page:
     1. Search by some text
     2. Search by some Categories
-    '''
-    fileToSearchBySomeText = None
-    fileToSearchByCategories = None
-    csrftoken = None
-
-    def __init__(self, parent):
-        super(SearchOnMainPage, self).__init__(parent)
+    """
+    def on_start(self):
         self.fileToSearchBySomeText = self.getValueToSearchBySomeText()
         self.fileToSearchByCategories = self.getValueToSearchByCategories()
         self.csrftoken = self.get_csrftoken()
-
 
     def getValueToSearchBySomeText(self):
         with open(os.path.realpath('.') + "/loadtests/research/string_value.txt") as file:
@@ -49,8 +45,6 @@ class SearchOnMainPage(TaskSet):
         )
         return post_req
 
-
-
     @task(1)
     def test_search_1(self):
         data = {'search_string': self.fileToSearchBySomeText, 'page_size': '100', 'page_index': '0'}
@@ -59,7 +53,7 @@ class SearchOnMainPage(TaskSet):
             **data
         )
 
-    @task(1)
+    @task(2)
     def test_search_2(self):
         data = {'search_string': '', 'page_size': '100', 'page_index': '0', 'category': self.fileToSearchByCategories}
         response = self._create_post_request(
@@ -67,8 +61,8 @@ class SearchOnMainPage(TaskSet):
             **data
         )
 
+
 class WebsiteUser(HttpLocust):
     task_set = SearchOnMainPage
     min_wait = 5
-    max_wait = 5
-    
+    max_wait = 25
