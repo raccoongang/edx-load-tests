@@ -5,10 +5,11 @@ import os
 import sys
 
 # due to locust sys.path manipulation, we need to re-add the project root.
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from locust import HttpLocust
-
+from xblocks import XblocksTasks
 from authentication_views import AuthenticationViewsTasks
 from courseware_views import CoursewareViewsTasks
 from forums import ForumsTasks, SeedForumsTasks
@@ -136,6 +137,7 @@ class LmsTest(LmsTasks):
     """
 
     tasks = {
+        XblocksTasks: 1,
         AuthenticationViewsTasks: 1,
         CoursewareViewsTasks: 5,
         ForumsTasks: 1,
