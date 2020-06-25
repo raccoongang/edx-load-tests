@@ -154,13 +154,13 @@ class LmsLocust(HttpLocust):
 
     def __init__(self, *args, **kwargs):
         super(LmsLocust, self).__init__(*args, **kwargs)
-        #TODO
+
         self._user_id = None
         self._email = None
         self._password = None
         self._is_logged_in = False
         self._is_enrolled = False
-
+        # TODO
         '''self._user_id = '22'
         self._email = 'andrtey.v.test11@gmail.com'
         self._password = 'A123456vm'
