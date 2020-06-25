@@ -139,7 +139,7 @@ class LmsTest(LmsTasks):
     tasks = {
         XblocksTasks: 1,
         AuthenticationViewsTasks: 1,
-        CoursewareViewsTasks: 5,
+        CoursewareViewsTasks: 1,
         ForumsTasks: 1,
         ModuleRenderTasks: int(round(22 * float(settings.data.get('MODULE_RENDER_MODIFIER', 1)))),
         ProctoredExamTasks: int(round(1 * float(settings.data.get('PROCTORED_EXAM_MODIFIER', 1)))),
@@ -154,12 +154,20 @@ class LmsLocust(HttpLocust):
 
     def __init__(self, *args, **kwargs):
         super(LmsLocust, self).__init__(*args, **kwargs)
+        #TODO
         self._user_id = None
         self._email = None
         self._password = None
         self._is_logged_in = False
         self._is_enrolled = False
 
+        '''self._user_id = '22'
+        self._email = 'andrtey.v.test11@gmail.com'
+        self._password = 'A123456vm'
+        self._is_logged_in = True
+        self._is_enrolled = True'''
+
     @property
     def _is_registered(self):
         return bool(self._user_id and self._email and self._password)
+
